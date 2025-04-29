@@ -1,3 +1,4 @@
+# 📦 ESPHome Configuration
 esphome:
   name: cyd
   friendly_name: CYD
@@ -10,20 +11,20 @@ esp32:
 # === OTA ===
 ota:
   - platform: esphome
-    password: "c553f4036e641023818e4ffc8c712f37"
+    password: "your_password"
 
 # === API Home Assistant ===
 api:
   encryption:
-    key: "halghpTRkPj0JR+XdsyF8vQJncnfKCOqrvlC9aA/W/g="
+    key: "your_key"
 
 # === Wi-Fi ===
 wifi:
-  ssid: "NETGEAR Poix Home"
-  password: "pastelballoon260"
+  ssid: "your_ssid"
+  password: "your_password"
   ap:
     ssid: "Cyd Fallback Hotspot"
-    password: "Poix2007!"
+    password: "your_password"
 
 # === Logger ===
 logger:
@@ -95,6 +96,7 @@ text_sensor:
     entity_id: light.sabre_laser
     internal: true
 
+# 🔤 Fonts
 font:
   - file: "gfonts://Roboto"
     id: heure_font
@@ -118,7 +120,7 @@ font:
     id: font_clock
     size: 28
   
-
+# 🎨 Colors
 color:
   - id: fond_bleu
     red: 6%
@@ -141,7 +143,7 @@ color:
     green: 100%
     blue: 100%  # Bleu néon
     
-
+# 🖼️ Images
 image:
   - file: "images/bg_full_240x320.bmp"
     id: background
@@ -369,7 +371,7 @@ binary_sensor:
           data:
             entity_id: light.sabre_laser
 
-
+# 🖥️ Display Configuration
 display:
   - platform: ili9xxx
     model: ILI9341
