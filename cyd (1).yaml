@@ -1,0 +1,494 @@
+esphome:
+  name: cyd
+  friendly_name: CYD
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# === OTA ===
+ota:
+  - platform: esphome
+    password: "c553f4036e641023818e4ffc8c712f37"
+
+# === API Home Assistant ===
+api:
+  encryption:
+    key: "halghpTRkPj0JR+XdsyF8vQJncnfKCOqrvlC9aA/W/g="
+
+# === Wi-Fi ===
+wifi:
+  ssid: "NETGEAR Poix Home"
+  password: "pastelballoon260"
+  ap:
+    ssid: "Cyd Fallback Hotspot"
+    password: "Poix2007!"
+
+# === Logger ===
+logger:
+
+spi:
+  - id: tft
+    clk_pin: GPIO14
+    mosi_pin: GPIO13
+    miso_pin: GPIO12
+  - id: touch
+    clk_pin: GPIO25
+    mosi_pin: GPIO32
+    miso_pin: GPIO39
+
+touchscreen:
+  platform: xpt2046
+  spi_id: touch
+  cs_pin: GPIO33
+  interrupt_pin: GPIO36
+  update_interval: 50ms
+  threshold: 400
+  calibration:
+    x_min: 280
+    x_max: 3860
+    y_min: 340
+    y_max: 3860
+
+time:
+  - platform: homeassistant
+    id: ha_time
+
+sensor:
+  - platform: homeassistant
+    id: temp_int
+    entity_id: sensor.capteur_salon_temperature
+    internal: true
+  - platform: homeassistant
+    id: temp_ext
+    entity_id: sensor.henin_beaumont_temperature
+    internal: true
+  - platform: homeassistant
+    name: "Etat météo"
+    id: weather_state
+    entity_id: weather.henin_beaumont
+
+text_sensor:
+  - platform: homeassistant
+    id: weather_state_text
+    entity_id: weather.forecast_maison
+    internal: true
+  - platform: homeassistant
+    id: state_logo
+    entity_id: light.logo_cvga
+    internal: true
+  - platform: homeassistant
+    id: state_xwing
+    entity_id: light.x_wing_2
+    internal: true
+  - platform: homeassistant
+    id: state_delo
+    entity_id: light.de_lorean_principal
+    internal: true
+  - platform: homeassistant
+    id: state_pc
+    entity_id: light.support_pc
+    internal: true
+  - platform: homeassistant
+    id: state_sabre
+    entity_id: light.sabre_laser
+    internal: true
+
+font:
+  - file: "gfonts://Roboto"
+    id: heure_font
+    size: 42
+  - file: "gfonts://Roboto"
+    id: date_font
+    size: 18
+  - file: "gfonts://Roboto"
+    id: temp_font
+    size: 16
+  - file: "gfonts://Roboto"
+    id: led_font
+    size: 14
+  - file: "gfonts://Roboto"
+    id: meteo_font
+    size: 16
+  - file: "fonts/OpenSans-SemiBold.ttf"
+    id: font_small
+    size: 14
+  - file: "fonts/OpenSans-SemiBold.ttf"
+    id: font_clock
+    size: 28
+  
+
+color:
+  - id: fond_bleu
+    red: 6%
+    green: 16%
+    blue: 22%
+  - id: fond_clair
+    red_int: 180
+    green_int: 180
+    blue_int: 220
+  - id: fond_halo
+    red: 40%
+    green: 100%
+    blue: 100%
+  - id: on_col
+    red: 100%
+    green: 60%
+    blue: 0%    # Orange néon
+  - id: off_col
+    red: 0%
+    green: 100%
+    blue: 100%  # Bleu néon
+    
+
+image:
+  - file: "images/bg_full_240x320.bmp"
+    id: background
+    resize: 240x320
+    type: RGB
+
+  - file: "images/x_wing_off.bmp"
+    id: img_xwing_off
+    type: RGB
+    resize: 48x48
+  - file: "images/x_wing_on.bmp"
+    id: img_xwing_on
+    type: RGB
+    resize: 48x48
+
+  - file: "images/logo_on.bmp"
+    id: img_logo_on
+    type: RGB
+    resize: 48x48
+  - file: "images/logo_off.bmp"
+    id: img_logo_off
+    resize: 48x48
+    type: RGB
+
+  - file: "images/delorean_on.bmp"
+    id: img_delo_on
+    resize: 48x48
+    type: RGB
+    transparency: chroma_key
+  - file: "images/delorean_off.bmp"
+    id: img_delo_off
+    resize: 48x48
+    type: RGB
+    transparency: chroma_key
+
+  - file: "images/pc_off_fixed.bmp"
+    id: img_pc_off
+    resize: 48x48
+    type: RGB
+    transparency: chroma_key
+  - file: "images/pc_on_fixed.bmp"
+    id: img_pc_on
+    resize: 48x48
+    type: RGB
+    transparency: chroma_key
+ 
+  - file: "images/sabre_on.bmp"
+    id: img_sabre_on
+    resize: 48x48
+    type: RGB
+    transparency: chroma_key
+  - file: "images/sabre_off.bmp"
+    id: img_sabre_off
+    resize: 48x48
+    type: RGB
+    transparency: chroma_key
+
+  - file: "images/all_on_on.bmp"
+    id: img_all_on
+    resize: 48x48
+    type: RGB
+    transparency: chroma_key
+  - file: "images/all_on_off.bmp"
+    id: img_all_off
+    resize: 48x48
+    type: RGB
+    transparency: chroma_key
+
+  - file: "images/clear_night.bmp"
+    id: img_clear_night
+    type: BINARY
+    resize: 50x50
+    transparency: chroma_key
+
+  - file: "images/cloudy.bmp"
+    id: img_cloudy
+    type: BINARY
+    resize: 50x50
+    transparency: chroma_key
+
+  - file: "images/partlycloudy.bmp"
+    id: img_partlycloudy
+    type: BINARY
+    resize: 50x50
+    transparency: chroma_key
+
+  - file: "images/rainy.bmp"
+    id: img_rainy
+    type: BINARY
+    resize: 50x50
+    transparency: chroma_key
+
+  - file: "images/snowy.bmp"
+    id: img_snowy
+    type: BINARY
+    resize: 50x50
+    transparency: chroma_key
+
+  - file: "images/lightning.bmp"
+    id: img_lightning
+    type: BINARY
+    resize: 50x50
+    transparency: chroma_key
+
+  - file: "images/windy.bmp"
+    id: img_windy
+    type: BINARY
+    resize: 50x50
+    transparency: chroma_key
+
+  - file: "images/sunny.bmp"
+    id: img_sunny
+    type: BINARY
+    resize: 50x50
+    transparency: chroma_key
+
+output:
+  - platform: ledc
+    pin: GPIO21
+    id: backlight_pin
+
+light:
+  - platform: monochromatic
+    output: backlight_pin
+    id: back_light
+    name: "Display Backlight"
+    restore_mode: ALWAYS_ON
+
+binary_sensor:
+  # Logo (gauche, haut)
+- platform: touchscreen
+  name: "LED Logo"
+  x_min: 10
+  x_max: 80
+  y_min: 110
+  y_max: 180
+  on_press:
+    then:
+      - homeassistant.service:
+          service: light.toggle
+          data:
+            entity_id: light.logo_cvga
+
+# X-Wing (droite, haut)
+- platform: touchscreen
+  name: "LED X-Wing"
+  x_min: 115
+  x_max: 185
+  y_min: 110
+  y_max: 180
+  on_press:
+    then:
+      - homeassistant.service:
+          service: light.toggle
+          data:
+            entity_id: light.x_wing_2
+
+# Victus (gauche, milieu)
+- platform: touchscreen
+  name: "LED Victus"
+  x_min: 115
+  x_max: 185
+  y_min: 175
+  y_max: 245
+  on_press:
+    then:
+      - homeassistant.service:
+          service: light.toggle
+          data:
+            entity_id: light.support_pc
+
+# DeLorean (droite, milieu)
+- platform: touchscreen
+  name: "LED DeLorean"
+  x_min: 10
+  x_max: 80
+  y_min: 175
+  y_max: 245
+  on_press:
+    then:
+      - homeassistant.service:
+          service: light.toggle
+          data:
+            entity_id: light.de_lorean_principal
+
+# All ON (gauche, bas)
+- platform: touchscreen
+  name: "LED All On"
+  x_min: 10
+  x_max: 80
+  y_min: 240
+  y_max: 310
+  on_press:
+    then:
+      - if:
+          condition:
+            or:
+              - lambda: 'return id(state_logo).state != "on";'
+              - lambda: 'return id(state_xwing).state != "on";'
+              - lambda: 'return id(state_pc).state != "on";'
+              - lambda: 'return id(state_delo).state != "on";'
+              - lambda: 'return id(state_sabre).state != "on";'
+          then:
+            - homeassistant.service:
+                service: light.turn_on
+                data:
+                  entity_id: "light.logo_cvga, light.x_wing_2, light.de_lorean_principal, light.support_pc, light.sabre_laser"
+          else:
+            - homeassistant.service:
+                service: light.turn_off
+                data:
+                  entity_id: "light.logo_cvga, light.x_wing_2, light.de_lorean_principal, light.support_pc, light.sabre_laser"
+
+# Sabre (droite, bas)
+- platform: touchscreen
+  name: "LED Sabre"
+  x_min: 115
+  x_max: 185
+  y_min: 240
+  y_max: 310
+  on_press:
+    then:
+      - homeassistant.service:
+          service: light.toggle
+          data:
+            entity_id: light.sabre_laser
+
+
+display:
+  - platform: ili9xxx
+    model: ILI9341
+    spi_id: tft
+    cs_pin: GPIO15
+    dc_pin: GPIO2
+    rotation: 0
+    invert_colors: false
+    color_palette: 8BIT
+    update_interval: 1s
+    lambda: |-
+      // Fond
+       it.image(0, 0, id(background));
+
+      // Heure et date
+      it.strftime(120, 5, id(font_clock), TextAlign::TOP_CENTER, "%H:%M", id(ha_time).now());
+      it.strftime(120, 35, id(font_small), TextAlign::TOP_CENTER, "%A %d %B", id(ha_time).now());
+
+      // Températures
+      it.printf(10, 5, id(font_small), TextAlign::TOP_LEFT, "%.1f°C", id(temp_int).state);
+      it.printf(230, 5, id(font_small), TextAlign::TOP_RIGHT, "%.1f°C", id(temp_ext).state);
+
+      // 🌤️ Affichage dynamique de l’icône météo
+      if (id(weather_state_text).state == "clear-night") {
+        it.image(95, 40, id(img_clear_night));  // centré
+      } else if (id(weather_state_text).state == "cloudy") {
+        it.image(95, 45, id(img_cloudy));
+      } else if (id(weather_state_text).state == "partlycloudy") {
+        it.image(95, 45, id(img_partlycloudy));
+      } else if (id(weather_state_text).state == "rainy") {
+        it.image(95, 45, id(img_rainy));
+      } else if (id(weather_state_text).state == "snowy") {
+        it.image(95, 45, id(img_snowy));
+      } else if (id(weather_state_text).state == "lightning") {
+        it.image(95, 45, id(img_lightning));
+      } else if (id(weather_state_text).state == "windy") {
+        it.image(95, 45, id(img_windy));
+      } else if (id(weather_state_text).state == "sunny") {
+        it.image(95, 45, id(img_sunny));
+      }
+
+      auto rect_color = Color(100, 100, 100);  // gris clair
+      auto on_color = Color(255, 140, 0);      // orange néon
+      auto off_color = Color(220, 230, 240);     // bleu néon
+
+      int icon_size = 48;
+      int rect_w = 100;
+      int rect_h = 70;
+      int base_x = 10;
+      int base_y = 100;
+      int spacing_x = 120;
+      int spacing_y = 75;  // écart entre les lignes réduit
+
+      // Fonction pour bordure "halo"
+      auto draw_halo_border = [&](int x, int y, bool is_on) {
+        Color halo = is_on ? on_color : off_color;
+        for (int i = 1; i >= 0; i--) {
+          it.rectangle(x - i, y - i, rect_w + 1 * i, rect_h + 1 * i, halo);
+        }
+      };
+
+      // ------- COLONNE GAUCHE -------
+      // Ligne 1 - X-Wing
+      bool xwing_on = id(state_xwing).state == "on";
+      Color xwing_col = xwing_on ? on_color : off_color;
+      draw_halo_border(base_x, base_y, xwing_on);
+      it.rectangle(base_x, base_y, rect_w, rect_h, xwing_col);
+      it.rectangle(base_x + 1, base_y + 1, rect_w - 2, rect_h - 2, xwing_col);
+      it.image(base_x + (rect_w - icon_size)/2, base_y + 6, xwing_on ? id(img_xwing_on) : id(img_xwing_off));
+      it.printf(base_x + rect_w/2, base_y + icon_size + 10, id(font_small), xwing_col, TextAlign::CENTER, "X-Wing");
+
+      // Ligne 2 - PC
+      int pc_y = base_y + spacing_y;
+      bool pc_on = id(state_pc).state == "on";
+      Color pc_col = pc_on ? on_color : off_color;
+      draw_halo_border(base_x, pc_y, pc_on);
+      it.rectangle(base_x, pc_y, rect_w, rect_h, pc_col);
+      it.rectangle(base_x + 1, pc_y + 1, rect_w - 2, rect_h - 2, pc_col);
+      it.image(base_x + (rect_w - icon_size)/2, pc_y + 6, pc_on ? id(img_pc_on) : id(img_pc_off));
+      it.printf(base_x + rect_w/2, pc_y + icon_size + 10, id(font_small), pc_col, TextAlign::CENTER, "Victus");
+
+      // Ligne 3 - Sabre
+      int sabre_y = base_y + 2 * spacing_y;
+      bool sabre_on = id(state_sabre).state == "on";
+      Color sabre_col = sabre_on ? on_color : off_color;
+      draw_halo_border(base_x, sabre_y, sabre_on);
+      it.rectangle(base_x, sabre_y, rect_w, rect_h, sabre_col);
+      it.rectangle(base_x + 1, sabre_y + 1, rect_w - 2, rect_h - 2, sabre_col);
+      it.image(base_x + (rect_w - icon_size)/2, sabre_y + 6, sabre_on ? id(img_sabre_on) : id(img_sabre_off));
+      it.printf(base_x + rect_w/2, sabre_y + icon_size + 10, id(font_small), sabre_col, TextAlign::CENTER, "Sabre");
+
+      // ------- COLONNE DROITE -------
+      int bx2 = base_x + spacing_x;
+
+      // Ligne 1 - Logo
+      bool logo_on = id(state_logo).state == "on";
+      Color logo_col = logo_on ? on_color : off_color;
+      draw_halo_border(bx2, base_y, logo_on);
+      it.rectangle(bx2, base_y, rect_w, rect_h, logo_col);
+      it.rectangle(bx2 + 1, base_y + 1, rect_w - 2, rect_h - 2, logo_col);
+      it.image(bx2 + (rect_w - icon_size)/2, base_y + 6, logo_on ? id(img_logo_on) : id(img_logo_off));
+      it.printf(bx2 + rect_w/2, base_y + icon_size + 10, id(font_small), logo_col, TextAlign::CENTER, "Logo");
+
+      // Ligne 2 - Delorean
+      int delorean_y = base_y + spacing_y;
+      bool delo_on = id(state_delo).state == "on";
+      Color delorean_col = delo_on ? on_color : off_color;
+      draw_halo_border(bx2, delorean_y, delo_on);
+      it.rectangle(bx2, delorean_y, rect_w, rect_h, delorean_col);
+      it.rectangle(bx2 + 1, delorean_y + 1, rect_w - 2, rect_h - 2, delorean_col);
+      it.image(bx2 + (rect_w - icon_size)/2, delorean_y + 6, delo_on ? id(img_delo_on) : id(img_delo_off));
+      it.printf(bx2 + rect_w/2, delorean_y + icon_size + 10, id(font_small), delorean_col, TextAlign::CENTER, "Delorean");
+
+      // Ligne 3 - All On/Off (état simulé)
+      int all_y = base_y + 2 * spacing_y;
+      bool all_on = logo_on && xwing_on && pc_on && delo_on && sabre_on;
+      Color all_col = all_on ? on_color : off_color;
+      draw_halo_border(bx2, all_y, all_on);
+      it.rectangle(bx2, all_y, rect_w, rect_h, all_col);
+      it.rectangle(bx2 + 1, all_y + 1, rect_w - 2, rect_h - 2, all_col);
+      it.image(bx2 + (rect_w - icon_size)/2, all_y + 6, all_on ? id(img_all_on) : id(img_all_off));
+      it.printf(bx2 + rect_w/2, all_y + icon_size + 10, id(font_small), all_col, TextAlign::CENTER, "All On/Off");
